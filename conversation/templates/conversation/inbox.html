@@ -9,7 +9,7 @@
             <a href="{% url 'conversation:detail' conversation.id %}">
                 <div class="p-6 flex bg-gray-100 rounded-xl">
                     <div class="pr-6">
-                        <img src="{{ conversation.item.image.url }}" class="y-20 rounded-xl">
+                        <img src="{{ conversation.item.image.url }}" class="h-20 rounded-xl">
                     </div>
                     <div>
                         {% for member in conversation.members.all %}
