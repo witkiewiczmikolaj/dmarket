@@ -1,5 +1,5 @@
 from django import forms
-from .models import Item
+from .models import Item, Review
 
 INPUT_CLASSES = 'w-full py-4 px-6 rounded-xl border'
 
@@ -43,4 +43,19 @@ class EditItemForm(forms.ModelForm):
                 'class': INPUT_CLASSES
             })
             
+        }
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('text', 'stars')
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'class': 'w-full max-h-36 py-4 px-6 rounded-xl border'
+            }),
+            'stars': forms.NumberInput(attrs={
+                'class': 'py-4 px-6 rounded-xl border',
+                'min': 1,
+                'max': 5
+            })
         }

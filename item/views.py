@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from .models import Item, Category
-from .forms import NewItemForm, EditItemForm
+from .models import Item, Category, Review
+from .forms import NewItemForm, EditItemForm, ReviewForm
 
 def items(request):
     query = request.GET.get('query', '')
@@ -25,10 +25,35 @@ def items(request):
 def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(pk=pk)[0:3]
+    reviews = Review.objects.filter(item=item).order_by('-created_at')
+    if reviews:
+        rating_sum = 0
+        for rating in range(len(reviews.values_list('stars'))):
+            rating_sum += reviews.values_list('stars')[rating][0]
+        stars = round(rating_sum/len(reviews.values_list('stars')),2)
+    else:
+        stars = 0
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            review_msg = form.save(commit=False)
+            review_msg.item = item
+            review_msg.created_by = request.user
+            review_msg.save()
+
+            return redirect('item:detail', pk=pk)
+    else:
+        form = ReviewForm()
+
 
     return render(request, 'item/detail.html', {
         'item': item,
         'related_items': related_items,
+        'reviews': reviews,
+        'form': form,
+        'stars': stars,
     })
 
 @login_required

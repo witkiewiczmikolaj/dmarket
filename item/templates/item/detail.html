@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="grid grid-cols-5 gap-6">
-    <div class="col-span-3">
-        <img src="{{ item.image.url }}" class="rounded-xl">
+    <div class="flex justify-center col-span-3">
+        <img src="{{ item.image.url }}" class="h-96 rounded-xl">
     </div>
 
     <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
@@ -33,14 +33,48 @@
 </div>
 
 <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl">Reviews</h2>
+        {% if not reviews %}
+            <p>There are no reviews for this product yet!</p>
+        {% else %}
+        <p class="mb-8">Rating: {{stars}}</p>
+        <div class="space-y-6 overflow-auto max-h-96">
+            {% for review in reviews %}
+                <div class="p-6 flex bg-pink-100 rounded-xl">
+                    <div>
+                        <p class="mb-4"><strong>{{ review.created_by.username }}</strong> @ {{ review.created_at }}</p>
+                        <p>Review: {{ review.text }}</p>
+                        <p>Stars: {{ review.stars }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <br>
+    {% if user.is_authenticated %}
+        {% if request.user != item.created_by %}
+            <p class="text-2xl">Leave your review here:</p>
+            <form method="POST" action="." class="mt-6">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="mt-6 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Submit</button>
+            </form>
+        {% else %}
+            <p class="text-2xl">You can't review your own products</p>
+        {% endif %}
+    {% else %}
+        <p class="text-2xl">Log in first to leave a review!</p>
+    {% endif %}
+</div>
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
     <h2 class="mb-12 text-2xl text-center">Related items</h2>
 
     <div class="grid grid-cols-3 gap-3">
         {% for item in related_items %}
          <div>
             <a href="{% url 'item:detail' item.id %}">
-                <div>
-                    <img src="{{ item.image.url }}" class="rounded-t-xl">
+                <div class="flex justify-center">
+                    <img src="{{ item.image.url }}" class="w-96 rounded-t-xl">
                 </div>
 
                 <div class="p-6 bg-white rounded-b-xl">

@@ -23,3 +23,13 @@ class Item(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Review(models.Model):
+    item = models.ForeignKey(Item , related_name='reviews', on_delete=models.CASCADE)
+    text = models.TextField(blank=False)
+    stars = models.IntegerField()
+    created_by = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text
