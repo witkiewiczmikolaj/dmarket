@@ -54,7 +54,8 @@ class ReviewForm(forms.ModelForm):
                 'class': 'w-full max-h-36 py-4 px-6 rounded-xl border'
             }),
             'stars': forms.NumberInput(attrs={
-                'class': 'py-4 px-6 rounded-xl border',
+                'class': 'invisible',
+                'id': 'stars',
                 'min': 1,
                 'max': 5
             })
