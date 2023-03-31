@@ -28,6 +28,16 @@
                 </div>
             {% endif %}
             <button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Submit</button>
+            <br>
+            
+            {% if messages %}
+            <div class="mt-6 mb-3 p-6 bg-green-100 rounded-xl">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+            
         </form>
     </div>
 {% endblock %}
