@@ -11,7 +11,7 @@
     <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
         <h1 class="mb-6 text-3xl">{{ item.name }}</h1>
         <p class="text-gray-500"><strong>Price: </strong>{{ item.price }}</p>
-        <p class="text-gray-500"><strong>Seller: </strong>{{ item.created_by }}</p>
+        <p class="text-gray-500"><strong>Seller: </strong><a class="hover:underline" href="{% url 'dashboard:user' item.created_by.id %}">{{ item.created_by }}</a></p>
 
         {% if item.description %}
         <p class="text-gray-700">
@@ -85,7 +85,7 @@
             <p class="text-2xl">You can't review your own products</p>
         {% endif %}
     {% else %}
-        <p class="text-2xl">Log in first to leave a review!</p>
+        <p class="text-2xl">Log in first to write a review!</p>
     {% endif %}
 </div>
 <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
@@ -102,6 +102,7 @@
                 <div class="p-6 bg-white rounded-b-xl">
                     <h2 class="text-2xl">{{ item.name }}</h2>
                     <p class="text-gray-500">Price: {{item.price}}</p>
+                    <p>Added by: <a class="hover:underline" href="{% url 'dashboard:user' item.created_by.id %}">{{ item.created_by }}</a></p>
                 </div>
             </a>
          </div>
@@ -111,7 +112,6 @@
 <script>
     function changeValue(int){
         document.getElementById('stars').value = int
-        
         for(let i = 1; i < 6; i++){
             if(i <= int){
                 document.getElementById(i).setAttribute('class', 'w-10 h-10 text-yellow-400 cursor-pointer')
