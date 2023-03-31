@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from .models import Item, Category, Review
+from .models import Item, Category, Review, User
 from .forms import NewItemForm, EditItemForm, ReviewForm
 
 def items(request):
@@ -94,3 +94,17 @@ def edit(request, pk):
         'form': form,
         'title': 'Edit item'
     })
+
+@login_required
+def addwishlist(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    user = get_object_or_404(User, pk=request.user.id)
+    item.wishlist.add(user)
+    return redirect('dashboard:index')
+
+@login_required
+def removewishlist(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    user = get_object_or_404(User, pk=request.user.id)
+    item.wishlist.remove(user)
+    return redirect('dashboard:index')
