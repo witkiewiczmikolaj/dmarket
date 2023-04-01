@@ -7,6 +7,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from item.models import Category, Item, User
+from cart.models import Cart
 from .forms import SignupForm
 from .tokens import account_activation_token
 
@@ -20,6 +21,8 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+        cart = Cart(user=user)
+        cart.save()
         messages.success(request, "You can now log in!")
         return redirect('/login/')
     else:
