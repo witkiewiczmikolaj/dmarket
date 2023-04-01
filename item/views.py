@@ -107,4 +107,4 @@ def removewishlist(request, pk):
     item = get_object_or_404(Item, pk=pk)
     user = get_object_or_404(User, pk=request.user.id)
     item.wishlist.remove(user)
-    return redirect('dashboard:index')
+    return redirect('item:detail', pk=pk)

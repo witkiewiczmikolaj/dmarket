@@ -4,8 +4,29 @@
 
 {% block content %}
     <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
-        <h2 class="mb-12 text-2xl text-center">Wishlist</h2>
-    
+        <h2 class="mb-12 text-2xl text-center">My orders</h2>  
+        
+            {% if past_carts %}
+            <div class="lg:grid grid-cols-6 gap-3">
+                {% for cart in past_carts %}
+                <div>
+                    <a href="{% url 'dashboard:cart' cart.id %}">
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl">Order number: {{ cart.id }}</h2>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="flex justify-center">
+                <p>Wishlist is empty!</p>
+            </div>
+            {% endif %}
+        </div>
+
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Wishlist</h2>  
         
             {% if wishlist %}
             <div class="lg:grid grid-cols-6 gap-3">

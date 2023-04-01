@@ -5,7 +5,7 @@
 {% block content %}
     <h2 class="mb-12 text-2xl text-center">Cart</h2>
     {% if cartitems %}
-    <div class="pb-6 grid grid-cols-12 gap-4 bg-gray-100">
+    <div class="pb-6 grid grid-cols-12 gap-4 bg-gray-100 overflow-auto max-h-screen">
         <ul class="pl-6 flex justify-start col-span-9">
             ITEM
         </ul>
@@ -46,6 +46,10 @@
             </ul>
             {% endfor %}
         
+    </div>
+    <div class="flex justify-end mt-8 mr-4">
+        <p class="inline-block px-3 py-2 text-lg font-semibold ">Total: {{ total }}</p>
+        <a href="{% url 'cart:buy' %}" class="inline-block px-3 py-2 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Buy</a>
     </div>
     {% else %}
     <div class="flex justify-center">
