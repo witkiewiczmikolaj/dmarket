@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 from item.models import Item
 
 class Cart(models.Model):
@@ -18,3 +19,10 @@ class CartItem(models.Model):
 
     def __str__(self):
         return self.item.name
+    
+class Coupon(models.Model):
+    name = models.CharField(max_length=255)
+    percent = models.IntegerField()
+
+    def __str__(self):
+        return self.name
