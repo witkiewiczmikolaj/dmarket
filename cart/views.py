@@ -21,9 +21,15 @@ def add_item(request, pk):
     quantity = request.GET.get('quantity', 0)
     cart = Cart.objects.get(user=request.user, is_bought=False)
     item = get_object_or_404(Item, pk=pk)
-    final_price = float(quantity) * item.price
-    cartitems = CartItem(item=item, quantity=quantity, price=final_price, cart=cart)
-    cartitems.save()
+    if CartItem.objects.filter(item=item, cart=cart).exists():
+        existing_item = CartItem.objects.get(item=item, cart=cart)
+        existing_item.quantity = existing_item.quantity + int(quantity)
+        existing_item.price = float(existing_item.quantity) * item.price
+        existing_item.save()
+    else:
+        final_price = float(quantity) * item.price
+        cartitems = CartItem(item=item, quantity=quantity, price=final_price, cart=cart)
+        cartitems.save()
     return redirect('cart:index')
 
 @login_required
