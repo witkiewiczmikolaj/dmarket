@@ -50,26 +50,32 @@ def buy(request):
 @login_required
 def coupon(request):
     coupon = request.GET.get('coupon', '')
-    coupons = Coupon.objects.all()
     cart = Cart.objects.get(user=request.user, is_bought=False)
     cartitems = CartItem.objects.filter(cart=cart)
     total = 0
+    new_total = 0
     for item in cartitems:
         total += item.price
     
-    for active in coupons:
-        if active.name == coupon:
-            discount = active.percent
-            coupon_exists = True
-            discount_total = total * float(discount) / 100.0
-            total = total - discount_total
-        else:
-            discount = 0
-            coupon_exists = False
+    try:
+        coupons = Coupon.objects.get(name=coupon)
+        cart.coupon = coupons.percent
+        cart.save()
+        discount = coupons.percent
+        coupon_exists = True
+        discount_total = total * float(discount) / 100.0
+        new_total = total - discount_total
+    except :
+        cart.coupon = 0
+        cart.save()
+        discount = 0
+        coupon_exists = False
+
     return render(request, 'cart/index.html', {
         'cart': cart,
         'cartitems': cartitems,
         'total': total,
+        'new_total': new_total,
         'discount': discount,
         'coupon_exists': coupon_exists,
     })

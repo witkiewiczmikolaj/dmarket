@@ -59,9 +59,14 @@
     </div>
     <br>
     <div class="flex justify-end mt-8 mr-4">
-        
-        <p class="inline-block px-3 py-2 text-lg font-semibold">Total: {{ total }}</p>
-        <a href="{% url 'cart:buy' %}" class="inline-block px-3 py-2 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Buy</a>
+        {% if not coupon_exists %}
+            <p class="inline-block px-3 py-2 text-lg font-semibold">Total: {{ total }}</p>
+            <a href="{% url 'cart:buy' %}" class="inline-block px-3 py-2 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Buy</a>
+        {% else %}
+            <p class="inline-block px-3 py-2 text-lg font-semibold">Old price: {{ total }}</p>
+            <p class="inline-block px-3 py-2 text-lg font-semibold">New price: {{ new_total }}</p>
+            <a href="{% url 'cart:buy' %}" class="inline-block px-3 py-2 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Buy</a>
+        {% endif %}
     </div>
     {% else %}
     <div class="flex justify-center">

@@ -37,6 +37,11 @@
             
         </div>
         <div class="flex justify-end mt-8 mr-4">
-            <p class="inline-block px-3 py-2 text-lg font-semibold ">Total: {{ total }}</p>
+            {% if not coupon_exists %}
+                <p class="inline-block px-3 py-2 text-lg font-semibold">Total paid: {{ total }}</p>
+            {% else %}
+                <p class="inline-block px-3 py-2 text-lg font-semibold">Discount: {{ cart.coupon }}%</p>
+                <p class="inline-block px-3 py-2 text-lg font-semibold">Total paid: {{ new_total }}</p>
+            {% endif %}
         </div>
 {% endblock %}

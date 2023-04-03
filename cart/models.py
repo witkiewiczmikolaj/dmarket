@@ -1,12 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MaxLengthValidator, MinLengthValidator
 from item.models import Item
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     is_bought = models.BooleanField(default=False)
+    coupon = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username

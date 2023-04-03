@@ -7,7 +7,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from item.models import Category, Item, User
-from cart.models import Cart
+from cart.models import Cart, Coupon
 from .forms import SignupForm
 from .tokens import account_activation_token
 
