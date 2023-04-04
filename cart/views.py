@@ -65,6 +65,8 @@ def coupon(request):
         coupon_exists = True
         discount_total = total * float(discount) / 100.0
         new_total = total - discount_total
+        for item in cartitems:
+            item.price = item.price - (item.price * float(discount) / 100.0)
     except :
         cart.coupon = 0
         cart.save()

@@ -5,7 +5,7 @@
 {% block content %}
     <h2 class="mb-12 text-2xl text-center">Order number: {{ cart.id }}</h2>
         <div class="pb-6 grid grid-cols-12 gap-4 bg-gray-100 overflow-auto max-h-screen">
-            <ul class="pl-6 flex justify-start col-span-10">
+            <ul class="pl-6 flex justify-center col-span-10">
                 ITEM
             </ul>
             <ul class="col-span-1 flex justify-center">
@@ -16,20 +16,20 @@
             </ul>
                 {% for item in cartitems %}
                 <ul class="col-span-10">
-                    <li class="flex justify-start">
+                    <li class="flex justify-center">
                         <img src="{{ item.item.image.url }}" class="lg:h-24 rounded-t-xl sm:h-auto">
                     </li>
-                    <li class="pl-6 flex justify-start">
+                    <li class="pl-6 flex justify-center">
                         <p class="text-gray-600">{{ item.item.name }}</p>
                     </li>
                 </ul>
                 <ul class="col-span-1">
-                    <li class="flex justify-center">
+                    <li class="mt-10 text-center">
                         <p class="text-gray-600">{{ item.quantity }}</p>
                     </li>
                 </ul>
                 <ul class="col-span-1">
-                    <li class="flex justify-center">
+                    <li class="mt-10 text-center">
                         <p class="text-gray-600">{{ item.price }}</p>
                     </li>
                 </ul>

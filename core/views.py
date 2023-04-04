@@ -49,14 +49,18 @@ def activateemail(request, user, to_email):
 def index(request):
     items = Item.objects.filter(is_sold=False).order_by('-created_at')[0:6]
     categories = Category.objects.all()
-    u_r = Recomendation.objects.get(user=request.user)
-    u_r_array = [u_r.Beauty, u_r.Clothes, u_r.Electronics, u_r.Furnitures, u_r.Sport, u_r.Toys]
-    if u_r_array == [0,0,0,0,0,0]:
-        recomendations_exist = False
+    if request.user.is_authenticated:
+        u_r = Recomendation.objects.get(user=request.user)
+        u_r_array = [u_r.Beauty, u_r.Clothes, u_r.Electronics, u_r.Furnitures, u_r.Sport, u_r.Toys]
+        if u_r_array == [0,0,0,0,0,0]:
+            recomendations_exist = False
+        else:
+            recomendations_exist = True
+        u_r_index = u_r_array.index(max(u_r_array))
+        recomendations = Item.objects.filter(is_sold=False, category=categories[u_r_index])
     else:
-        recomendations_exist = True
-    u_r_index = u_r_array.index(max(u_r_array))
-    recomendations = Item.objects.filter(is_sold=False, category=categories[u_r_index])
+        recomendations = None
+        recomendations_exist = False
     return render(request, 'core/index.html', {
         'categories': categories,
         'items': items,
