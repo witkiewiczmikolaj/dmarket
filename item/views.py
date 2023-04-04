@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from .models import Item, Category, Review, User
+from core.models import Recomendation
 from .forms import NewItemForm, EditItemForm, ReviewForm
 
 def items(request):
@@ -26,6 +27,11 @@ def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(pk=pk)[0:3]
     reviews = Review.objects.filter(item=item).order_by('-created_at')
+    recomendation = Recomendation.objects.get(user=request.user)
+    category = item.category.name
+    value = getattr(recomendation, category)
+    setattr(recomendation, category, value+1)
+    recomendation.save()
     if reviews:
         rating_sum = 0
         for rating in range(len(reviews.values_list('stars'))):

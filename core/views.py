@@ -8,6 +8,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from item.models import Category, Item, User
 from cart.models import Cart, Coupon
+from core.models import Recomendation
 from .forms import SignupForm
 from .tokens import account_activation_token
 
@@ -21,8 +22,8 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        cart = Cart(user=user)
-        cart.save()
+        Cart(user=user).save()
+        Recomendation(user=user).save()
         messages.success(request, "You can now log in!")
         return redirect('/login/')
     else:
@@ -48,9 +49,19 @@ def activateemail(request, user, to_email):
 def index(request):
     items = Item.objects.filter(is_sold=False).order_by('-created_at')[0:6]
     categories = Category.objects.all()
+    u_r = Recomendation.objects.get(user=request.user)
+    u_r_array = [u_r.Beauty, u_r.Clothes, u_r.Electronics, u_r.Furnitures, u_r.Sport, u_r.Toys]
+    if u_r_array == [0,0,0,0,0,0]:
+        recomendations_exist = False
+    else:
+        recomendations_exist = True
+    u_r_index = u_r_array.index(max(u_r_array))
+    recomendations = Item.objects.filter(is_sold=False, category=categories[u_r_index])
     return render(request, 'core/index.html', {
         'categories': categories,
         'items': items,
+        'recomendations': recomendations,
+        'recomendations_exist': recomendations_exist,
     })
 
 def signup(request):
